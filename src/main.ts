@@ -1,20 +1,16 @@
 import { NestFactory } from '@nestjs/core';
+import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
-import { MicroserviceOptions } from '@nestjs/microservices/interfaces';
-import { Transport } from '@nestjs/microservices/enums';
 
-// validation-microservice/main.ts
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.TCP,
-      options: {
-        port: 9001,
-        host: 'localhost',
-      },
+  const app = await NestFactory.create(AppModule);
+  app.connectMicroservice({
+    transport: Transport.TCP,
+    options: {
+      port: 9000,
     },
-  );
-  await app.listen();
+  });
+  await app.startAllMicroservices();
+  await app.listen(9000);
 }
 bootstrap();
