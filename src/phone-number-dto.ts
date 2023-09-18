@@ -1,4 +1,4 @@
-export class PhoneNumber {
+export class PhoneNumberDTO {
   phoneNumber: string;
   phoneNumberCountryCode: string;
   phoneNumberType: string;
