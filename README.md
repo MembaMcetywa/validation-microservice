@@ -1,73 +1,38 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NestJs Validation Microservice app
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a phone number generator microservice used to validate and save the validated phone numbers results to a mongodb instance.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The project is built using the following:
 
-## Description
+--Nestjs <br />
+--TypeScript <br />
+--MongoDB <br />
+--Docker <br />
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Docker
 
-## Installation
+The microservice utilizes a docker container with a mongoDB instance that we save the result of valition service to. To bootstrap the container execute the following commands:
 
-```bash
-$ npm install
-```
+1. `cd validation-microservice`
+2. `docker-compose up -d`
+   You can check if the container is up by running the following command:
 
-## Running the app
+`docker ps`
 
-```bash
-# development
-$ npm run start
+This should show you an entry of the mongodb container in the list of running containers. This check confirms to us whether or not the container is running successfully.
 
-# watch mode
-$ npm run start:dev
+Should you wish to you stop the container from running, execute the following command:
 
-# production mode
-$ npm run start:prod
-```
+`docker compose down`
 
-## Test
+# Microservice
 
-```bash
-# unit tests
-$ npm run test
+To get microservice app app running, execute the following commands:
 
-# e2e tests
-$ npm run test:e2e
+1. `git clone git@github.com:MembaMcetywa/backend.git`
+2. `cd validation-microservice`
+3. `npm install`
+4. `npm run start:dev`
+5. `http://127.0.0.1:9000/`
 
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+At this point the microservice should be up should be running successfully on port 9000. Generally I would advise with starting your docker container before you start the application because it will attempt to connect the db when it does.
