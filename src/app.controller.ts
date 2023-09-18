@@ -1,48 +1,54 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { parsePhoneNumber } from 'libphonenumber-js';
+import { AppService } from './app.service';
+import { PhoneNumberDTO } from '../src/phone-number-dto';
 
+// constructor(private readonly phoneNumberService: PhoneNumberService) {}
 @Controller('api')
 export class AppController {
+  constructor(private readonly appService: AppService) {}
   @MessagePattern({ cmd: 'validate-phone-number' })
   @Post('validate-phone-number')
   async validatePhoneNumbers(@Body() body: { phoneNumbers: string[] }) {
     const { phoneNumbers } = body;
     const validationResults = [];
+    const savedPhoneNumbers = [];
     for (const phoneNumber of phoneNumbers) {
       try {
         const parsedPhoneNumber = parsePhoneNumber(phoneNumber);
         if (parsedPhoneNumber) {
-          const isValid = parsedPhoneNumber.isValid();
-          console.log('is valid::', isValid);
-          const isPhoneNumberPossible = parsedPhoneNumber.isPossible();
-          console.log('is it possible', isPhoneNumberPossible);
-          const phoneNumberType = parsedPhoneNumber.getType();
-          console.log(phoneNumberType);
           const extractedPhoneNumber = parsedPhoneNumber.number;
-          console.log(extractedPhoneNumber);
           const phoneNumberCountryCode = parsedPhoneNumber.country;
-          console.log(phoneNumberCountryCode);
+          const phoneNumberType = parsedPhoneNumber.getType();
+          const isValid = parsedPhoneNumber.isValid();
+          const isPhoneNumberPossible = parsedPhoneNumber.isPossible();
 
-          validationResults.push({
-            extractedPhoneNumber,
-            isValid,
-            phoneNumberType,
-            isPhoneNumberPossible,
-          });
+          const phoneData: PhoneNumberDTO = {
+            phoneNumber: extractedPhoneNumber,
+            phoneNumberCountryCode: phoneNumberCountryCode,
+            phoneNumberType: phoneNumberType,
+            phoneNumberIsValid: isValid,
+            phoneNumberIsPossible: isPhoneNumberPossible,
+          };
+
+          const savedPhoneNumber =
+            await this.appService.savePhoneNumber(phoneData);
+
+          savedPhoneNumbers.push(savedPhoneNumber);
         } else {
-          validationResults.push({
+          savedPhoneNumbers.push({
             phoneNumber,
             error: 'Invalid phone number format',
           });
         }
       } catch (error) {
-        validationResults.push({
+        savedPhoneNumbers.push({
           phoneNumber,
           error: 'Invalid phone number format',
         });
       }
     }
-    return validationResults;
+    return validationResults && savedPhoneNumbers;
   }
 }
